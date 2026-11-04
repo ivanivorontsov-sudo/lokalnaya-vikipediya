@@ -15,6 +15,12 @@ public class TextCleanTest {
     eq("Сердце ( ,  ,) —  полый","Сердце — полый");
     eq("Незакрытая ( скобка, ок","Незакрытая ( скобка, ок");
     eq("лишняя ) скобка","лишняя ) скобка");
+    eq("Ньютон (,, Оксфорд, Англия —, Шалю, Франция) — физик","Ньютон (Оксфорд, Англия, Шалю, Франция) — физик");
+    eq("Слово () и (;) и (,) тут","Слово и и тут");
+    eq("Годы 1941—1945, война","Годы 1941—1945, война");
+    eq("А — б, в: г","А — б, в: г");
+    eq("x ;, y","x; y");
+    if(TextClean.text(null)!=null){fail++;System.out.println("FAIL null");}
     if(!TextClean.text("А (,) б\n\nВ ( ) г").equals("А б\n\nВ г")){fail++;System.out.println("FAIL text");}
     StringBuilder big=new StringBuilder(); for(int i=0;i<20000;i++) big.append("Сердце (,) — орган ( ; ) x. ");
     big.append("("); for(int i=0;i<500000;i++) big.append(' '); // худший случай для регулярок

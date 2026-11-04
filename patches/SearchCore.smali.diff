@@ -1,0 +1,11 @@
+--- s121/ru/vorontsov/wiki/SearchCore.smali	2026-11-04 22:34:04.292158638 +1000
++++ sm/ru/vorontsov/wiki/SearchCore.smali	2026-11-04 22:34:37.068195728 +1000
+@@ -1214,6 +1214,8 @@
+     const/4 v7, 1
+     aget-object v5, v5, v7
+     check-cast v5, Ljava/lang/String;
++    invoke-static { v5 }, Lru/vorontsov/wiki/TextClean;->text(Ljava/lang/String;)Ljava/lang/String;
++    move-result-object v5
+     iput-object v5, v4, Lru/vorontsov/wiki/SearchCore$Hit;->lead:Ljava/lang/String;
+     iget-object v5, v2, Lru/vorontsov/wiki/SearchCore$Result;->hits:Ljava/util/List;
+     invoke-interface { v5, v4 }, Ljava/util/List;->add(Ljava/lang/Object;)Z

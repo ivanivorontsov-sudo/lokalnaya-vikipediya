@@ -10,8 +10,36 @@ public final class TextClean {
     static boolean isSpace(char c) { return c == ' ' || c == '\t' || c == '\u00A0'; }
 
     /** Убирает «( , ; )», вложенные «((,))», и запятые у краёв скобок. Один проход стеком, O(n). */
+    static boolean isRunSep(char c) { return c == ',' || c == ';' || c == ':' || c == '–' || c == '—'; }
+
+    /** «,,» → «,», «—,» / «, —» → «,», «; ,» → «;». Линейно. Одиночные знаки не трогает. */
+    static String collapseSeps(String s) {
+        StringBuilder out = null;
+        int n = s.length(), last = 0;
+        for (int i = 0; i < n; ) {
+            char c = s.charAt(i);
+            if (!isRunSep(c) && !isSpace(c)) { i++; continue; }
+            int j = i, seps = 0; boolean comma = false, semi = false;
+            while (j < n && (isRunSep(s.charAt(j)) || isSpace(s.charAt(j)))) {
+                char d = s.charAt(j);
+                if (isRunSep(d)) { seps++; if (d == ',') comma = true; if (d == ';') semi = true; }
+                j++;
+            }
+            if (seps >= 2 && (comma || semi)) {
+                if (out == null) out = new StringBuilder(n);
+                out.append(s, last, i).append(semi ? "; " : ", ");
+                last = j;
+            }
+            i = j;
+        }
+        if (out == null) return s;
+        return out.append(s, last, n).toString();
+    }
+
     public static String line(String s) {
-        if (s == null || s.indexOf('(') < 0 && s.indexOf('[') < 0) return s;
+        if (s == null) return null;
+        s = collapseSeps(s);
+        if (s.indexOf('(') < 0 && s.indexOf('[') < 0) return s;
         StringBuilder out = new StringBuilder(s.length());
         int[] open = new int[16]; boolean[] content = new boolean[16]; int depth = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -60,11 +88,12 @@ public final class TextClean {
 
     public static String text(String s) {
         if (s == null) return null;
+        String orig = s;
         try {
             String[] lines = s.split("\n", -1);
             StringBuilder sb = new StringBuilder(s.length());
             for (int i = 0; i < lines.length; i++) { if (i > 0) sb.append('\n'); sb.append(line(lines[i])); }
             return sb.toString();
-        } catch (Throwable t) { return s; }
+        } catch (Throwable t) { return orig; }
     }
 }
