@@ -1,0 +1,11 @@
+--- ../s11/ru/vorontsov/wiki/ArticleActivity.smali	2026-11-04 22:30:21.195906171 +1000
++++ ../sm/ru/vorontsov/wiki/ArticleActivity.smali	2026-11-04 22:29:04.927819863 +1000
+@@ -79,6 +79,8 @@
+     const/4 v2, 1
+   .line 10
+     aget-object p1, p1, v2
++    invoke-static { p1 }, Lru/vorontsov/wiki/TextClean;->text(Ljava/lang/String;)Ljava/lang/String;
++    move-result-object p1
+     const-string v3, "\n"
+     invoke-virtual { p1, v3 }, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
+     move-result-object p1

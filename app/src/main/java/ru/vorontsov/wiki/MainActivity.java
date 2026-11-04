@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
                     textView2.setText(hit.title);
                     textView2.setTextColor(Color.rgb(26, 13, 171));
                     textView2.setTypeface(null, 1);
-                    textView3.setText(MainActivity.this.highlight(TextClean.line(hit.lead)));
+                    textView3.setText(MainActivity.this.highlight(hit.lead));
                     textView3.setMaxLines(3);
                     textView3.setVisibility(0);
                 } else {

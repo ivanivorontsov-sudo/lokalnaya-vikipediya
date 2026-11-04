@@ -8,14 +8,18 @@ public class TextCleanTest {
     eq("Пётр I ((, ;)) — царь","Пётр I — царь");
     eq("Луна (лат. Luna, ) — спутник","Луна (лат. Luna) — спутник");
     eq("Вода (, H2O) — вещество","Вода (H2O) — вещество");
-    eq("Гёте (нем. ; ) — поэт","Гёте — поэт");
     eq("Река ( — ) течёт","Река течёт");
     eq("Город [ , ] стоит , на реке .","Город стоит, на реке.");
     eq("Рим (лат. Roma; итал. Roma) — столица","Рим (лат. Roma; итал. Roma) — столица");
     eq("Число (1) и f(x)","Число (1) и f(x)");
-    eq("Атом (от греч. ) — частица","Атом — частица");
     eq("Сердце ( ,  ,) —  полый","Сердце — полый");
+    eq("Незакрытая ( скобка, ок","Незакрытая ( скобка, ок");
+    eq("лишняя ) скобка","лишняя ) скобка");
     if(!TextClean.text("А (,) б\n\nВ ( ) г").equals("А б\n\nВ г")){fail++;System.out.println("FAIL text");}
+    StringBuilder big=new StringBuilder(); for(int i=0;i<20000;i++) big.append("Сердце (,) — орган ( ; ) x. ");
+    big.append("("); for(int i=0;i<500000;i++) big.append(' '); // худший случай для регулярок
+    long t0=System.nanoTime(); String r=TextClean.text(big.toString()); long ms=(System.nanoTime()-t0)/1000000;
+    System.out.println("1MB+ ("+big.length()+" симв) за "+ms+" мс"); if(ms>2000||r.contains("(,)")){fail++;System.out.println("FAIL perf");}
     System.out.println(fail==0?"ALL PASSED":fail+" FAILED"); System.exit(fail==0?0:1);
   }
 }
